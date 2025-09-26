@@ -7,25 +7,33 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Repo yuklanayapti
+      # Repo yuklash
+      - name: Repository yuklanmoqda
         uses: actions/checkout@v4
 
-      - name: node_modules o‘rnatish
-        run: npm install
-
-      - name: Build qilish
-        run: npm run build
-
-      - name: Serverga deploy qilish
+      # Serverga deploy qilish
+      - name: Deploy serverga
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.DO_SSH_KEY }}
           script: |
+            # Global path ni export qilamiz
+            export PATH=$PATH:/usr/local/bin
+
             cd /root/projects/CI-CD
+
+            echo "👉 Gitdan yangilayapmiz..."
             git pull origin main
+
+            echo "👉 NPM install ishlayapti..."
             npm install --production
+
+            echo "👉 Build qilayapmiz..."
             npm run build
+
+            echo "👉 PM2 qayta ishga tushiryapmiz..."
             pm2 restart prisma || pm2 start dist/main.js --name prisma
