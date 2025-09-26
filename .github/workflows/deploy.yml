@@ -32,7 +32,7 @@ jobs:
             echo "👉 NPM install ishlayapti..."
             npm install --production
 
-            echo "👉 Build qilayapmiz..."
+            echo "👉 Build qilayapmiz...."
             npm run build
 
             echo "👉 PM2 qayta ishga tushiryapmiz..."
