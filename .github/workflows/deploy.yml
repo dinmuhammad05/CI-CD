@@ -10,3 +10,9 @@ jobs:
     steps:
       - name: Repo yuklanayapti
         uses: actions/checkout@v4
+
+  Install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: node_modules papkasini yuklash
+        run: npm i
