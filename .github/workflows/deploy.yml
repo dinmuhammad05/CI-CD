@@ -1,21 +1,31 @@
-name: CI
+name: CI/CD
 
 on:
   push:
     branches: [main]
 
 jobs:
-  Repositoryani_yuklash:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Repo yuklanayapti
         uses: actions/checkout@v4
 
-  Install:
-    runs-on: ubuntu-latest
-    steps:
-       - name: Repo yuklanayapti
-         uses: actions/checkout@v4
+      - name: node_modules o‘rnatish
+        run: npm install
 
-       - name: node_modules papkasini yuklash
-         run: npm i
+      - name: Build qilish
+        run: npm run build
+
+      - name: Serverga deploy qilish
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USER }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          script: |
+            cd /root/projects/CI-CD
+            git pull origin main
+            npm install --production
+            npm run build
+            pm2 restart prisma || pm2 start dist/main.js --name prisma
