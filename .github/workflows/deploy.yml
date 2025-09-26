@@ -14,5 +14,8 @@ jobs:
   Install:
     runs-on: ubuntu-latest
     steps:
-      - name: node_modules papkasini yuklash
-        run: npm i
+       - name: Repo yuklanayapti
+         uses: actions/checkout@v4
+
+       - name: node_modules papkasini yuklash
+         run: npm i
